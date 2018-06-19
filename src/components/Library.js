@@ -8,13 +8,13 @@ export default class Library extends Component {
     return(
       <article>
       <h2>Rental Library</h2>
-      <MovieCollection key="mc-1" url={this.props.baseUrl} selectedMovieCallback={this.props.customerClickCallback} />
+      <MovieCollection key="mc-1" url={this.props.baseUrl} selectedMovieCallback={this.props.selectedMovieCallback} />
       </article>
     )
   }
 
   static propTypes = {
-    customerClickCallback: PropTypes.func.isRequired,
+    selectedMovieCallback: PropTypes.func.isRequired,
     baseUrl: PropTypes.string
   }
 }

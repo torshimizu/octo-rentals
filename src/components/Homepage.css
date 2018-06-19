@@ -20,3 +20,8 @@
   height: 75vh;
   overflow-x: scroll;
 }
+
+ul {
+  list-style-type: none;
+  display: inline-flex;
+}

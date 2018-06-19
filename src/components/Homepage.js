@@ -8,7 +8,10 @@ import {
 import CustomerCollection from './CustomerCollection';
 import Library from './Library';
 import Movie from './Movie';
-import './Homepage.css'
+import Search from './Search';
+import MovieCollection from './MovieCollection';
+
+import './Homepage.css';
 
 const BASE_URL = 'http://localhost:3000/';
 
@@ -18,8 +21,14 @@ class Homepage extends React.Component {
 
     this.state = {
       selectedCustomer: null,
-      selectedMovie: null
+      selectedMovie: null,
+      query: null
     }
+  }
+
+  search = (query) => {
+    console.log(query);
+    this.setState({query: query['query']})
   }
 
   updateSelectedCustomer = (customerObj) => {
@@ -37,6 +46,12 @@ class Homepage extends React.Component {
           movieData={this.state.selectedMovie}
           />
       </section>
+    )
+  }
+
+  displaySearch () {
+    return(
+        <MovieCollection query={this.state.query} url={BASE_URL}/>
     )
   }
 
@@ -66,6 +81,11 @@ class Homepage extends React.Component {
     if (this.state.selectedMovie) {
       selectedMovie = this.displayMovie();
     }
+
+    let searchResults = null;
+    if (this.state.query) {
+      searchResults = this.displaySearch();
+    }
     console.log(this.state);
     return (
       <Router>
@@ -90,13 +110,20 @@ class Homepage extends React.Component {
               <li>
                 <Link to='/customers'>Customers</Link>
               </li>
+              <li>
+                <Link to='/search'>Search</Link>
+                <Route path='/search'
+                  render={() => <Search
+                  searchCallback={this.search}/>
+                  }/>
+              </li>
             </ul>
           </header>
           <main>
             <Route exact path='/' />
             <Route
               path='/library'
-              render={() => <Library customerClickCallback={this.updateSelectedMovie} baseUrl={BASE_URL}/>}
+              render={() => <Library selectedMovieCallback={this.updateSelectedMovie} baseUrl={BASE_URL}/>}
               />
             <Route
               path='/customers'
@@ -107,6 +134,7 @@ class Homepage extends React.Component {
                 />
               }
             } />
+          {searchResults}
           </main>
         </section>
 

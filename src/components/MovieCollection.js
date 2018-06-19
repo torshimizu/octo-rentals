@@ -10,20 +10,45 @@ export default class MovieCollection extends Component {
     super(props);
 
     this.state = {
-      movies: []
+      movies: [],
+      searchResults: []
     }
   }
+
   componentDidMount() {
-    const movieURL = this.props.url + '/movies';
-    axios.get(movieURL)
-    .then((response) => {
-      this.setState({movies: response.data});
-      //add a status component
-    })
-    .catch((error) => {
-      console.log(error);
-      //add a status component
-    });
+    let movieURL = this.props.url + '/movies';
+    const query = this.props.query['query']
+
+    console.log(this.props.query);
+
+    if (query) {
+      movieURL = (movieURL + '?query=' + query)
+
+      axios.get(movieURL)
+      .then((response) => {
+        console.log(response)
+        this.setState({searchResults: response.data});
+        // add a status component
+      })
+      .catch((error) => {
+        console.log(error);
+        // add a status component
+      })
+    } else {
+      axios.get(movieURL)
+      .then((response) => {
+        this.setState({movies: response.data});
+        //add a status component
+      })
+      .catch((error) => {
+        console.log(error);
+        //add a status component
+      });
+    }
+  }
+
+  addMovie = (movie) => {
+    console.log(movie)
   }
 
   getMovies = () => {
@@ -45,10 +70,29 @@ export default class MovieCollection extends Component {
     );
   }
 
+  getSearchResults = () => {
+    this.state.searchResults.map((movie, index) => {
+      const addMovieCallback = () => {
+        this.addMovie(movie);
+      }
+      return(
+        <li className="movie-list__item " key={index}>
+          <h2>Search Result # {index}</h2>
+          <Movie
+            image_url={movie.image_url}
+            movieData={movie}
+            addMovieCallback={addMovieCallback}
+            />
+        </li>
+      )
+    })
+  }
+
   render(){
     return(
       <ul className="movie-list">
         {this.getMovies()}
+        {this.getSearchResults()}
       </ul>
     )
   }
