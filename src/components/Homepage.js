@@ -19,60 +19,57 @@ class Homepage extends React.Component {
     this.setState({selectedCustomer: customerObj});
   }
 
-  selectedMovie = (movie) => {
-    let updateState = Object.assign({}, this.state);
-
-    updateState['selectedMovie'] = movie;
-    updateState['selectedMovieID'] = movie.id;
-
-    this.setState(updateState);
+  updateSelectedMovie = (movieObj) => {
+    this.setState({selectedMovie: movieObj});
   }
 
   displayMovie() {
-    if (this.state.selectedMovie) {
-      const movie = this.state.selectedMovie;
       return (
         <section className="selected-movie">
           <Movie
-          external_id={movie.external_id}
-          id={movie.id}
-          image_url={movie.image_url}
-          />
+            movieData={this.state.selectedMovie}
+            />
         </section>
-    )}
-    return (<div className="selected-movie">No Selected Movie</div>)
-  }
-
-  render() {
-    let selectedCustomer = null;
-    if (this.state.selectedCustomer) {
-      selectedCustomer = this.state.selectedCustomer.name;
+      )
     }
-    const selectedMovie = this.displayMovie();
-    console.log(this.state);
-    console.log(selectedCustomer);
-    return (
-      <section>
-        <header className="App-header">
-          <h1 className="App-title">Welcome to OctosVideoStore</h1>
-          <div>
-            <h4>Current Customer: </h4>
-            <span>{selectedCustomer}</span>
-          </div>
-        </header>
 
-        <section className="main-content">
-          <Library selectedMovieCallback={this.selectedMovie} url={BASE_URL}/>
+    render() {
+      let selectedCustomer = null;
+      if (this.state.selectedCustomer) {
+        selectedCustomer = this.state.selectedCustomer.name;
+      }
+      let selectedMovie = null;
+      if (this.state.selectedMovie) {
+        selectedMovie = this.displayMovie();
+      }
+      console.log(this.state);
+      console.log(selectedCustomer);
+      return (
+        <section>
+          <header className="App-header">
+            <h1 className="App-title">Welcome to OctosVideoStore</h1>
+            <div>
+              <h4>Current Customer: </h4>
+              <span>{selectedCustomer}</span>
+              <div>
+                <h4>Current Movie:</h4>
+                {selectedMovie}
+              </div>
+            </div>
+          </header>
+
+          <section className="main-content">
+            <Library customerClickCallback={this.updateSelectedMovie} baseUrl={BASE_URL}/>
+          </section>
+
+          <CustomerCollection
+            baseUrl={BASE_URL}
+            customerClickCallback={this.updateSelectedCustomer}
+            />
         </section>
+      )
+    }
 
-        <CustomerCollection
-          baseUrl={BASE_URL}
-          customerClickCallback={this.updateSelectedCustomer}
-          />
-      </section>
-    )
   }
 
-}
-
-export default Homepage;
+  export default Homepage;
