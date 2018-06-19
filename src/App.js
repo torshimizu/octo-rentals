@@ -46,9 +46,7 @@ class App extends Component {
     const selectedMovie = this.displayMovie();
     return (
       <div className="App">
-<<<<<<< HEAD
         <Homepage />
-=======
         <header className="App-header">
           {selectedMovie}
           <h1 className="App-title">Welcome to OctosVideoStore</h1>
@@ -56,7 +54,6 @@ class App extends Component {
         <section className="main-content">
           <Library selectedMovieCallback={this.selectedMovie}/>
         </section>
->>>>>>> a52338144694c1e456bb6771243435e69b0f676e
       </div>
     );
   }
