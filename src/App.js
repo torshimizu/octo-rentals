@@ -1,18 +1,58 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
 import './App.css';
+import Library from './components/Library';
+import Movie from './components/Movie'
 
 class App extends Component {
+  constructor(){
+    super();
+
+    this.state = {}
+  }
+
+  // removeSelectedMovie = () => {
+  //   console.log(this.state);
+  //   this.setState=({});
+  //   console.log(this.state);
+  // }
+
+  selectedMovie = (movie) => {
+    let updateState = Object.assign({}, this.state);
+
+    updateState['selectedMovie'] = movie;
+    updateState['selectedMovieID'] = movie.id;
+
+    this.setState(updateState);
+  }
+
+  displayMovie() {
+    console.log(this.state);
+    if (this.state.selectedMovie) {
+      const movie = this.state.selectedMovie;
+      return (
+        <section className="selected-movie">
+          <Movie
+          external_id={movie.external_id}
+          id={movie.id}
+          image_url={movie.image_url}
+          />
+        </section>
+    )}
+    return (<div className="selected-movie">No Selected Movie</div>)
+  }
+
   render() {
+    const selectedMovie = this.displayMovie();
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          {selectedMovie}
+          <h1 className="App-title">Welcome to OctosVideoStore</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <section className="main-content">
+          <Library selectedMovieCallback={this.selectedMovie}/>
+        </section>
       </div>
     );
   }

@@ -1,0 +1,28 @@
+.movie-list {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.movie-list__item {
+  display: flex;
+  flex-flow: wrap row;
+  margin: .5em;
+}
+
+.movie-list__item img {
+    float: left;
+    margin-right: 2rem;
+    border: 1px solid aliceblue;
+}
+
+.movie-details__item {
+    display: block;
+    text-align: left;
+    max-width: 80vw;
+}
+
+.movie-list__item:nth-of-type(even) {
+  background-color: rgba(217, 211, 214, .2);
+}
