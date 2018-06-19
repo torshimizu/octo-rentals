@@ -55,15 +55,13 @@ class Homepage extends React.Component {
       <section>
         <header className="App-header">
           <h1 className="App-title">Welcome to OctosVideoStore</h1>
-        </header>
-
-        <section className="main-content">
-          <h4>Current Movie: </h4>
-          <span>{selectedMovie}</span>
           <div>
             <h4>Current Customer: </h4>
             <span>{selectedCustomer}</span>
           </div>
+        </header>
+
+        <section className="main-content">
           <Library selectedMovieCallback={this.selectedMovie} url={BASE_URL}/>
         </section>
 
