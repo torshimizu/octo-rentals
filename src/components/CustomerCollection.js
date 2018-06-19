@@ -20,7 +20,6 @@ class CustomerCollection extends React.Component {
     const customerURL = this.props.baseUrl + '/customers'
     axios.get(customerURL)
       .then((response) => {
-        console.log(response.data);
 
         this.setState({customers: response.data});
 
@@ -52,7 +51,7 @@ class CustomerCollection extends React.Component {
   render() {
     return (
       <div>
-        Hello from customer collection!
+        <h2>List of Customers:</h2>
         {this.getCustomers()}
       </div>
     )
