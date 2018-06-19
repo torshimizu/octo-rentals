@@ -13,16 +13,18 @@ export default class MovieCollection extends Component {
       movies: []
     }
   }
+
   componentDidMount() {
     this.setMovies();
   }
 
   setMovies() {
-    let BASE_URL = this.props.url;
-    if (this.props.query) {
-      BASE_URL = BASE_URL + "?"
-    }
-    axios.get(BASE_URL)
+    // let BASE_URL = this.props.url;
+    // if (this.props.query) {
+    //   BASE_URL = BASE_URL + '/movies'
+    // }
+    const ALL_MOVIES = this.props.url + '/movies'
+    axios.get(ALL_MOVIES)
     .then((response) => {
       const movies = response.data;
       this.setState({movies: movies});
@@ -57,7 +59,6 @@ export default class MovieCollection extends Component {
   }
 
   movieCollection() {
-    // console.log(this.state.movies);
     return this.state.movies.map((movie) => {
       return (
         <li className="movie-list__item " key={movie.id}>
