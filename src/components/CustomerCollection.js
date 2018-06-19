@@ -32,10 +32,8 @@ class CustomerCollection extends React.Component {
     return (
       this.state.customers.map((customer, index) => {
         const onCustomerClick = () => {
-          console.log('this happened');
           this.props.customerClickCallback(customer);
         }
-
         return (
           <Customer
             key={index}

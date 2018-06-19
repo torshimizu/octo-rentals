@@ -13,14 +13,21 @@ class Homepage extends React.Component {
   }
 
   updateSelectedCustomer = (customerObj) => {
-    console.log(this.state.selectedCustomer);
     this.setState({selectedCustomer: customerObj});
-
   }
 
   render() {
+    let selectedCustomer = null;
+    if (this.state.selectedCustomer) {
+      selectedCustomer = this.state.selectedCustomer.name;
+    }
+
     return (
       <section>
+        <aside>
+          <h4>Current Customer: </h4>
+          <span>{selectedCustomer}</span>
+        </aside>
         <CustomerCollection
           baseUrl={BASE_URL}
           customerClickCallback={this.updateSelectedCustomer}
