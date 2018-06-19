@@ -17,12 +17,12 @@ export default class MovieCollection extends Component {
 
   componentDidMount() {
     let movieURL = this.props.url + '/movies';
-    const query = this.props.query['query']
 
-    console.log(this.props.query);
-
+    const query = this.props.query
     if (query) {
       movieURL = (movieURL + '?query=' + query)
+
+      console.log(movieURL)
 
       axios.get(movieURL)
       .then((response) => {
@@ -44,6 +44,7 @@ export default class MovieCollection extends Component {
         console.log(error);
         //add a status component
       });
+
     }
   }
 
