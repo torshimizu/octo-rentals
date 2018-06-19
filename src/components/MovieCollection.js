@@ -26,7 +26,6 @@ export default class MovieCollection extends Component {
 
       axios.get(movieURL)
       .then((response) => {
-        console.log(response)
         this.setState({searchResults: response.data});
         // add a status component
       })
@@ -72,7 +71,9 @@ export default class MovieCollection extends Component {
   }
 
   getSearchResults = () => {
-    this.state.searchResults.map((movie, index) => {
+    // debugger;
+    console.log(this.state.searchResults)
+    return this.state.searchResults.map((movie, index) => {
       const addMovieCallback = () => {
         this.addMovie(movie);
       }
@@ -90,10 +91,15 @@ export default class MovieCollection extends Component {
   }
 
   render(){
+    let movieCollection = null;
+    if (this.state.movies.length == 0) {
+      movieCollection = this.getSearchResults();
+    } else {
+      movieCollection = this.getMovies();
+    }
     return(
       <ul className="movie-list">
-        {this.getMovies()}
-        {this.getSearchResults()}
+        {movieCollection}
       </ul>
     )
   }
