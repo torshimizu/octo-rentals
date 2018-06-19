@@ -2,6 +2,7 @@ import React from 'react';
 import CustomerCollection from './CustomerCollection';
 import Library from './Library';
 import Movie from './Movie';
+import './Homepage.css'
 
 const BASE_URL = 'http://localhost:3000/'
 

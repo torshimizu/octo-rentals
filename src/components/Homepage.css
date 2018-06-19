@@ -1,0 +1,22 @@
+.selected-movie {
+    background-color: darkgray;
+    max-height: 250px;
+    max-width: 200px;
+    width: 12vw;
+    height: 18vw;
+    position: fixed;
+    top: 0;
+}
+
+.selected-movie img {
+  width: 100%;
+}
+
+.selected-movie .movie-details__item {
+    display: none;
+}
+
+.main-content {
+  height: 75vh;
+  overflow-x: scroll;
+}
