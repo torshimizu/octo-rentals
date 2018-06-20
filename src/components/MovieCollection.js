@@ -84,8 +84,6 @@ export default class MovieCollection extends Component {
   }
 
   getSearchResults = () => {
-    // debugger;
-    console.log(this.state.searchResults)
     return this.state.searchResults.map((movie, index) => {
       const addMovieCallback = () => {
         this.addMovie(movie);
