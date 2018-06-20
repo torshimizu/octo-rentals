@@ -27,7 +27,6 @@ class Homepage extends React.Component {
   }
 
   search = (query) => {
-    console.log(query);
     this.setState({query: query['query']})
   }
 
@@ -82,10 +81,7 @@ class Homepage extends React.Component {
             <div>
               <h4>Current Customer: </h4>
               <span>{selectedCustomer}</span>
-              <div>
-                <h4>Current Movie:</h4>
                 {selectedMovie}
-              </div>
             </div>
             <ul>
               <li>

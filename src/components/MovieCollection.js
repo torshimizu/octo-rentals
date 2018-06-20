@@ -18,12 +18,9 @@ export default class MovieCollection extends Component {
   componentDidMount() {
     let movieURL = this.props.url + '/movies';
 
-    const query = this.props.query
+    const query = this.props.query;
     if (query) {
       movieURL = (movieURL + '?query=' + query)
-
-      console.log(movieURL)
-
       axios.get(movieURL)
       .then((response) => {
         this.setState({searchResults: response.data});
@@ -43,7 +40,23 @@ export default class MovieCollection extends Component {
         console.log(error);
         //add a status component
       });
+    }
+  }
 
+  componentDidUpdate(prevProps) {
+  if (this.props.query !== prevProps.query) {
+      const query = this.props.query;
+      let movieURL = this.props.url + '/movies?query=' + query;
+
+      axios.get(movieURL)
+      .then((response) => {
+        this.setState({searchResults: response.data});
+        // add a status component
+      })
+      .catch((error) => {
+        console.log(error);
+        // add a status component
+      })
     }
   }
 
