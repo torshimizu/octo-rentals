@@ -1,15 +1,21 @@
 .selected-movie {
-    background-color: darkgray;
-    max-height: 250px;
-    max-width: 200px;
+    background-color: rgba(84, 85, 85, .2);
     width: 12vw;
-    height: 18vw;
-    position: fixed;
+    height: 12vw;
+    position: absolute;
     top: 0;
+    margin-top: .5em;
+    border: .5rem solid rgba(238, 238, 238, 0.2);
+    border-radius: 1.5rem;
 }
 
 .selected-movie img {
-  width: 100%;
+  width: 6vw;
+}
+
+.selected-movie h4 {
+  margin: .5em;
+  font-size: 1em;
 }
 
 .selected-movie .movie-details__item {

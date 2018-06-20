@@ -6,7 +6,8 @@ import Customer from './Customer';
 class CustomerCollection extends React.Component {
   static propTypes = {
     baseUrl: PropTypes.string,
-    customerClickCallback: PropTypes.func.isRequired
+    customerClickCallback: PropTypes.func.isRequired,
+    displayAlert: PropTypes.func
   }
 
   constructor (props) {
@@ -20,11 +21,13 @@ class CustomerCollection extends React.Component {
     const customerURL = this.props.baseUrl + '/customers'
     axios.get(customerURL)
       .then((response) => {
-
         this.setState({customers: response.data});
+        this.props.displayAlert('success', 'Successfully loaded customers');
 
       }).catch((errors) => {
         console.log(errors);
+        this.props.displayAlert('error', 'Unable to load customers');
+
       });
   }
 

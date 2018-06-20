@@ -18,24 +18,28 @@ export default class MovieCollection extends Component {
   componentDidMount() {
     let movieURL = this.props.url + '/movies';
 
+
     const query = this.props.query;
     if (query) {
+      this.props.displayAlert('loading', `Searching for ${query}`);
       movieURL = (movieURL + '?query=' + query)
       axios.get(movieURL)
       .then((response) => {
         this.setState({searchResults: response.data});
-        this.props.displayAlert('success', `Loading results for ${query}`);
+        this.props.displayAlert('success', `Loaded results for ${query}`);
       })
       .catch((error) => {
         console.log(error);
         this.props.displayAlert('error', 'Unable to load movies');
       })
     } else {
+      this.props.displayAlert('loading', `Loading Movies...`);
+
       axios.get(movieURL)
       .then((response) => {
         this.setState({movies: response.data});
         //add a status component
-        this.props.displayAlert('success', 'Loading movies...');
+        this.props.displayAlert('success', 'Loaded movies');
       })
       .catch((error) => {
         console.log(error);
@@ -51,11 +55,13 @@ export default class MovieCollection extends Component {
       const query = this.props.query;
       let movieURL = this.props.url + '/movies?query=' + query;
 
+      this.props.displayAlert('loading', `Searching for ${query}`)
+
       axios.get(movieURL)
       .then((response) => {
         this.setState({searchResults: response.data});
         // add a status component
-        this.props.displayAlert('success', `Loading results for ${response.data.title}`);
+        this.props.displayAlert('success', `Loaded results for ${response.data.title}`);
       })
       .catch((error) => {
         console.log(error);
@@ -103,9 +109,6 @@ export default class MovieCollection extends Component {
   }
 
   getSearchResults = () => {
-    // debugger;
-    console.log(this.state.searchResults)
-
     return this.state.searchResults.map((movie, index) => {
       const addMovieCallback = () => {
         this.addMovie(movie);

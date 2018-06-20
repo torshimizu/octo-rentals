@@ -4,6 +4,7 @@ import {
   Link,
   Route
 } from 'react-router-dom';
+import axios from 'axios';
 
 import Alert from './Status';
 import CustomerCollection from './CustomerCollection';
@@ -31,6 +32,37 @@ class Homepage extends React.Component {
       }
     }
   }
+  checkout = (event) => {
+    event.preventDefault();
+    const movie = this.state.selectedMovie;
+    const customer = this.state.selectedCustomer;
+
+    if (this.state.selectedCustomer && this.state.selectedMovie) {
+      const title = movie.title;
+      const id = customer.id;
+
+      let dueDate = new Date();
+      let day = (dueDate.getDate() + 1);
+      dueDate.setDate(day);
+      dueDate = dueDate.toDateString();
+
+
+      const URL = (BASE_URL + `rentals/${title}/check-out?customer_id=${id}&due_date=${dueDate}`);
+      axios.post(URL)
+      .then((response) => {
+        //status update responseText
+        this.setState({
+          selectedCustomer: null,
+          selectedMovie: null,
+          query: null
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+        //status update errorMessages
+      })
+    }
+  }
 
   search = (query) => {
     this.setState({query: query['query']})
@@ -41,11 +73,25 @@ class Homepage extends React.Component {
   }
 
   updateSelectedMovie = (movieObj) => {
-    this.setState({selectedMovie: movieObj});
+    if (this.state.selectedMovie === movieObj){
+      this.setState({selectedMovie: null});
+    } else {
+      this.setState({selectedMovie: movieObj});
+    }
   }
 
   clearQuery = () => {
     this.setState({query: null});
+    this.clearAlert();
+  }
+
+  clearAlert = () => {
+    this.setState({
+      alert: {
+        type: null,
+        message: null
+      }
+    })
   }
 
   displayAlert = (type, message) => {
@@ -60,6 +106,7 @@ class Homepage extends React.Component {
   displayMovie() {
     return (
       <section className="selected-movie">
+        <h4>Current Movie:</h4>
         <Movie
           movieData={this.state.selectedMovie}
           />
@@ -92,7 +139,6 @@ class Homepage extends React.Component {
     if (this.state.query) {
       searchResults = this.displaySearch();
     }
-    console.log(this.state);
     return (
       <Router>
         <section>
@@ -101,11 +147,16 @@ class Homepage extends React.Component {
             <div>
               <h4>Current Customer: </h4>
               <span>{selectedCustomer}</span>
+              <div>
                 {selectedMovie}
+              </div>
+              <div className="checkout-button" onClick={this.checkout}>
+                Checkout
+              </div>
             </div>
             <ul>
               <li>
-                <Link to='/'>Home</Link>
+                <Link to='/' onClick={this.clearQuery}>Home</Link>
               </li>
               <li>
                 <Link to='/library'>Library</Link>
@@ -114,12 +165,12 @@ class Homepage extends React.Component {
                 <Link to='/customers'>Customers</Link>
               </li>
               <li>
-                <Link to='/search'>Search</Link>
+                <Link to='/search' onClick={this.clearAlert}>Search</Link>
                 <Route path='/search'
                   render={() => <Search
-                  searchCallback={this.search}
-                  />
-                  }/>
+                    searchCallback={this.search}
+                    />
+                }/>
               </li>
             </ul>
           </header>
@@ -127,7 +178,7 @@ class Homepage extends React.Component {
             type={this.state.alert.type}
             message={this.state.alert.message}
           />
-          <main>
+          <main className="main-content">
             <Route exact path='/' />
             <Route
               path='/library'
@@ -144,10 +195,11 @@ class Homepage extends React.Component {
                 return <CustomerCollection
                   baseUrl={BASE_URL}
                   customerClickCallback={this.updateSelectedCustomer}
-                />
+                  displayAlert={this.displayAlert}
+                  />
               }
             } />
-          {searchResults}
+            {searchResults}
           </main>
         </section>
 
