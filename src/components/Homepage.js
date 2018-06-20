@@ -6,11 +6,13 @@ import {
 } from 'react-router-dom';
 import axios from 'axios';
 
+import Alert from './Status';
 import CustomerCollection from './CustomerCollection';
 import Library from './Library';
 import Movie from './Movie';
 import Search from './Search';
 import MovieCollection from './MovieCollection';
+
 
 import './Homepage.css';
 
@@ -23,7 +25,11 @@ class Homepage extends React.Component {
     this.state = {
       selectedCustomer: null,
       selectedMovie: null,
-      query: null
+      query: null,
+      alert: {
+        message: null,
+        type: null
+      }
     }
   }
   checkout = (event) => {
@@ -78,6 +84,15 @@ class Homepage extends React.Component {
     this.setState({query: null});
   }
 
+  displayAlert = (type, message) => {
+    this.setState({
+      alert: {
+        type: type,
+        message: message
+      }
+    });
+  }
+
   displayMovie() {
     return (
       <section className="selected-movie">
@@ -91,7 +106,12 @@ class Homepage extends React.Component {
 
   displaySearch () {
     return(
-      <MovieCollection query={this.state.query} url={BASE_URL} clearQueryCallback={this.clearQuery}/>
+        <MovieCollection
+          query={this.state.query}
+          url={BASE_URL}
+          clearQueryCallback={this.clearQuery}
+          displayAlert={this.displayAlert}
+          />
     )
   }
 
@@ -144,11 +164,20 @@ class Homepage extends React.Component {
               </li>
             </ul>
           </header>
+          <Alert
+            type={this.state.alert.type}
+            message={this.state.alert.message}
+          />
           <main className="main-content">
             <Route exact path='/' />
             <Route
               path='/library'
-              render={() => <Library selectedMovieCallback={this.updateSelectedMovie} baseUrl={BASE_URL}/>}
+              render={() => {
+                return <Library
+                  selectedMovieCallback={this.updateSelectedMovie}
+                  baseUrl={BASE_URL}
+                  displayAlert={this.displayAlert}
+                  />}}
               />
             <Route
               path='/customers'

@@ -18,32 +18,50 @@ export default class MovieCollection extends Component {
   componentDidMount() {
     let movieURL = this.props.url + '/movies';
 
-    const query = this.props.query
+    const query = this.props.query;
     if (query) {
       movieURL = (movieURL + '?query=' + query)
-
-      console.log(movieURL)
-
       axios.get(movieURL)
       .then((response) => {
         this.setState({searchResults: response.data});
-        // add a status component
+        this.props.displayAlert('success', `Loading results for ${query}`);
       })
       .catch((error) => {
         console.log(error);
-        // add a status component
+        this.props.displayAlert('error', 'Unable to load movies');
       })
     } else {
       axios.get(movieURL)
       .then((response) => {
         this.setState({movies: response.data});
         //add a status component
+        this.props.displayAlert('success', 'Loading movies...');
       })
       .catch((error) => {
         console.log(error);
         //add a status component
-      });
+        this.props.displayAlert('error', 'Unable to load movies');
 
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+  if (this.props.query !== prevProps.query) {
+      const query = this.props.query;
+      let movieURL = this.props.url + '/movies?query=' + query;
+
+      axios.get(movieURL)
+      .then((response) => {
+        this.setState({searchResults: response.data});
+        // add a status component
+        this.props.displayAlert('success', `Loading results for ${response.data.title}`);
+      })
+      .catch((error) => {
+        console.log(error);
+        // add a status component
+        this.props.displayAlert('error', `Unable to load results for ${query}`)
+      })
     }
   }
 
@@ -54,12 +72,13 @@ export default class MovieCollection extends Component {
       .then((response) => {
         console.log(response.data);
         // update status
-
+        this.props.displayAlert('success', `Successfully added ${response.data.title}`);
         this.setState({searchResults: []});
         this.props.clearQueryCallback();
 
       }).catch((error) => {
         console.log(error);
+        this.props.displayAlert('error', 'Unable to add movie');
       });
 
   }
@@ -119,6 +138,7 @@ export default class MovieCollection extends Component {
     url: PropTypes.string.isRequired,
     query: PropTypes.string,
     selectedMovieCallback: PropTypes.func,
-    clearQueryCallback: PropTypes.func
+    clearQueryCallback: PropTypes.func,
+    displayAlert: PropTypes.func
   }
 }
