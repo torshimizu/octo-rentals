@@ -48,7 +48,20 @@ export default class MovieCollection extends Component {
   }
 
   addMovie = (movie) => {
-    console.log(movie)
+    const postURL = this.props.url + `movies?query=${movie.external_id}`;
+
+    axios.post(postURL)
+      .then((response) => {
+        console.log(response.data);
+        // update status
+
+        this.setState({searchResults: []});
+        this.props.clearQueryCallback();
+
+      }).catch((error) => {
+        console.log(error);
+      });
+
   }
 
   getMovies = () => {
@@ -92,10 +105,10 @@ export default class MovieCollection extends Component {
 
   render(){
     let movieCollection = null;
-    if (this.state.movies.length == 0) {
-      movieCollection = this.getSearchResults();
-    } else {
+    if (this.state.movies.length !== 0) {
       movieCollection = this.getMovies();
+    } else {
+      movieCollection = this.getSearchResults();
     }
     return(
       <ul className="movie-list">
@@ -107,6 +120,7 @@ export default class MovieCollection extends Component {
   static propTypes = {
     url: PropTypes.string.isRequired,
     query: PropTypes.string,
-    selectedMovieCallback: PropTypes.func
+    selectedMovieCallback: PropTypes.func,
+    clearQueryCallback: PropTypes.func
   }
 }

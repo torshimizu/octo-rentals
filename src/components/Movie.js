@@ -6,7 +6,10 @@ import './Movie.css'
 
 const Movie = (props) => {
   const movie = props.movieData;
-
+  let button = null;
+  if (props.addMovieCallback) {
+    button = (<button onClick={props.addMovieCallback}>Add to Library</button>)
+  }
   return(
     <section onClick={props.onMovieClick} >
       <img src={movie.image_url} alt={`${movie.title} poster`}/>
@@ -15,6 +18,7 @@ const Movie = (props) => {
         <p>Overview: {movie.overview}</p>
         <p>Release Date: {movie.release_date}</p>
       </article>
+      {button}
     </section>
   )
 }

@@ -39,6 +39,10 @@ class Homepage extends React.Component {
     this.setState({selectedMovie: movieObj});
   }
 
+  clearQuery = () => {
+    this.setState({query: null});
+  }
+
   displayMovie() {
     return (
       <section className="selected-movie">
@@ -51,26 +55,9 @@ class Homepage extends React.Component {
 
   displaySearch () {
     return(
-        <MovieCollection query={this.state.query} url={BASE_URL}/>
+        <MovieCollection query={this.state.query} url={BASE_URL} clearQueryCallback={this.clearQuery}/>
     )
   }
-
-  // displayLibrary = () => {
-  //   return (
-  //     <section className="main-content">
-  //       <Library customerClickCallback={this.updateSelectedMovie} baseUrl={BASE_URL}/>
-  //     </section>
-  //   )
-  // }
-  //
-  // Customers = () => {
-  //   return (
-  //     <CustomerCollection
-  //       baseUrl={BASE_URL}
-  //       customerClickCallback={this.updateSelectedCustomer}
-  //       />
-  //   )
-  // }
 
   render() {
     let selectedCustomer = null;
@@ -114,7 +101,8 @@ class Homepage extends React.Component {
                 <Link to='/search'>Search</Link>
                 <Route path='/search'
                   render={() => <Search
-                  searchCallback={this.search}/>
+                  searchCallback={this.search}
+                  />
                   }/>
               </li>
             </ul>

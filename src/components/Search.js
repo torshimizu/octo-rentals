@@ -12,14 +12,14 @@ export default class Search extends Component {
 
   onInputChange = (event) => {
 
-  let updatedInput = Object.assign({}, this.state);
+    let updatedInput = Object.assign({}, this.state);
 
-  updatedInput[event.target.name] = event.target.value;
+    updatedInput[event.target.name] = event.target.value;
 
-  this.setState(updatedInput);
-}
+    this.setState(updatedInput);
+  }
 
-onFormSubmit = (event) => {
+  onFormSubmit = (event) => {
     event.preventDefault();
 
     this.props.searchCallback(this.state)
@@ -28,12 +28,12 @@ onFormSubmit = (event) => {
   render() {
     return(
       <form onSubmit={this.onFormSubmit}>
-      <input type="text" name="query" value={this.state.query} onChange={this.onInputChange}/>
-      <input type="submit" value="Search"/>
+        <input type="text" name="query" value={this.state.query} onChange={this.onInputChange}/>
+        <input type="submit" value="Search"/>
       </form>
     )
   }
-  
+
   static propTypes = {
     searchCallback: PropTypes.func.isRequired
   }
