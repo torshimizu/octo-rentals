@@ -6,7 +6,8 @@ import Customer from './Customer';
 class CustomerCollection extends React.Component {
   static propTypes = {
     baseUrl: PropTypes.string,
-    customerClickCallback: PropTypes.func.isRequired
+    customerClickCallback: PropTypes.func.isRequired,
+    displayAlert: PropTypes.func
   }
 
   constructor (props) {
@@ -22,7 +23,7 @@ class CustomerCollection extends React.Component {
       .then((response) => {
 
         this.setState({customers: response.data});
-
+        this.props.displayAlert('success', );
       }).catch((errors) => {
         console.log(errors);
       });

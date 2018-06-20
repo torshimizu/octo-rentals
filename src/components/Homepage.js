@@ -81,7 +81,13 @@ class Homepage extends React.Component {
   }
 
   clearQuery = () => {
-    this.setState({query: null});
+    this.setState({
+      query: null,
+      alert: {
+        type: null,
+        message: null
+      }
+    });
   }
 
   displayAlert = (type, message) => {
@@ -146,7 +152,7 @@ class Homepage extends React.Component {
             </div>
             <ul>
               <li>
-                <Link to='/'>Home</Link>
+                <Link to='/' onClick={this.clearQuery}>Home</Link>
               </li>
               <li>
                 <Link to='/library'>Library</Link>
@@ -185,6 +191,7 @@ class Homepage extends React.Component {
                 return <CustomerCollection
                   baseUrl={BASE_URL}
                   customerClickCallback={this.updateSelectedCustomer}
+                  displayAlert={this.displayAlert}
                   />
               }
             } />
