@@ -46,11 +46,14 @@ class Homepage extends React.Component {
       dueDate.setDate(day);
       dueDate = dueDate.toDateString();
 
+      this.displayAlert('loading', 'Checking out movie...')
 
       const URL = (BASE_URL + `rentals/${title}/check-out?customer_id=${id}&due_date=${dueDate}`);
+
       axios.post(URL)
       .then((response) => {
         //status update responseText
+        this.displayAlert('success', `Successfully checked out ${title} for ${customer.name}`)
         this.setState({
           selectedCustomer: null,
           selectedMovie: null,
@@ -60,6 +63,7 @@ class Homepage extends React.Component {
       .catch((error) => {
         console.log(error)
         //status update errorMessages
+        this.displayAlert('error', 'Unable to checkout movie');
       })
     }
   }
@@ -139,6 +143,13 @@ class Homepage extends React.Component {
     if (this.state.query) {
       searchResults = this.displaySearch();
     }
+
+    let checkoutButton = null;
+    if (this.state.selectedMovie && this.state.selectedCustomer) {
+      checkoutButton = (<div className="checkout-button" onClick={this.checkout}>
+          Checkout
+        </div>)
+    }
     return (
       <Router>
         <section>
@@ -150,9 +161,7 @@ class Homepage extends React.Component {
               <div>
                 {selectedMovie}
               </div>
-              <div className="checkout-button" onClick={this.checkout}>
-                Checkout
-              </div>
+              {checkoutButton}
             </div>
             <ul>
               <li>
