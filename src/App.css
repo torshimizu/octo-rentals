@@ -1,28 +1,205 @@
+@import url(https://fonts.googleapis.com/css?family=Oswald);
+@import url(https://fonts.googleapis.com/css?family=Quattrocento);
+
 .App {
   text-align: center;
+  font-family: 'Oswald', sans-serif;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+/* caption text styling */
+
+.movie-details {
+  font-family: 'Quattrocento', Arial, sans-serif;
+/*   float: left; */
+  overflow: hidden;
+/*   margin: 10px 1%; */
+/*   width: 100%; */
+  color: #141414;
+/*   text-align: left; */
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.movie-details * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+
 }
 
-.App-title {
-  font-size: 1.5em;
+.movie-details .caption {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  position: absolute;
+  top: calc(50%);
+  height: 80%;
+  width: 100%;
+  background-color: #000;
+  z-index:0;
+/*   padding: 5rem 3rem 5rem; */
+  transform: translateY(20.5%);
 }
 
-.App-intro {
-  font-size: large;
+.movie-details .caption:before {
+  position: absolute;
+  content: '';
+  z-index: -1;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  height: 35%;
+  background-image: -webkit-linear-gradient(top, transparent 0%, #000 100%);
+  background-image: linear-gradient(to bottom, transparent 0%, #000 100%);
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.movie-details span {
+  font-size: .75em;
+  align-self: flex-end;
+/*   puts the year off the page, we can just not render it though, or format it differently so it just returns the year. */
+  transform: translate(100%, 100%)
+}
+
+.movie-details h3 {
+    -ms-flex-item-align: center;
+    align-self: center;
+    -webkit-transform: translateY(-80%);
+    -ms-transform: translateY(-80%);
+    transform: translateY(-25%);
+    margin: 0 2vw;
+    font-weight: 300;
+    padding: 2vw;
+    font-size: 6vw;
+    line-height: 6vw;
+    font-family: 'Oswald', Arial, sans-serif;
+    text-transform: uppercase;
+    z-index: 3;
+    color: #fff;
+}
+
+.movie-details p {
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+    font-weight: 100;
+    font-size: 0vw;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    color: #fff;
+    -ms-flex-item-align: center;
+    align-self: center;
+}
+
+.movie-details:hover p {
+    -webkit-transform: translateY(33%);
+    -ms-transform: translateY(33%);
+    transform: translateY(20%);
+    height: 45%;
+    width: 77%;
+    font-size: 3.25vw;
+    overflow: scroll;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+.movie-details:hover .caption,
+.movie-details.hover .caption {
+  transform: translateY(-34%);
+  z-index: 2;
+}
+
+/* Hex Styling */
+.movie-list {
+  display: flex;
+  flex-flow: wrap row;
+  justify-content: flex-start;
+  height: 100vh;
+  overflow: scroll;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.movie-list__item *{
+  position:absolute;
+  visibility:visible;
+}
+
+/* skewed diamond */
+
+.movie-list li.movie-list__item > section{
+  width:100%;
+  height:100%;
+  text-align:center;
+  color:#fff;
+  overflow:hidden;
+
+  -webkit-transform: skewY(-30deg) rotate(60deg);
+  -ms-transform: skewY(-30deg) rotate(60deg);
+  transform: skewY(-30deg) rotate(60deg);
+
+	-webkit-backface-visibility:hidden;
+
+}
+
+/* half hexagon */
+
+.movie-list li.movie-list__item img{
+  left:-100%; right:-100%; bottom: -30%;
+  width: auto; width:100%;
+  margin:0 auto;
+}
+
+.movie-list li.movie-list__item:last-of-type{
+  bottom: 0;
+}
+
+.movie-list__item:nth-of-type(2n + 2) {
+  right: -33%;
+  margin-top: -17%;
+  margin-bottom: -17%;
+}
+
+.movie-list__item {
+position: relative;
+list-style-type:none;
+/*   min-width: 27.85714285714286%; */
+width:65%; /* = (100-2.5) / 3.5 */
+padding-bottom: 75.057736720554273%; /* =  width /0.866 */
+overflow:hidden;
+visibility:hidden;
+
+-webkit-transform: rotate(-60deg) skewY(30deg);
+-ms-transform: rotate(-60deg) skewY(30deg);
+transform: rotate(-60deg) skewY(30deg);
+}
+
+
+@media (min-width: 450px) {
+
+  .movie-list {
+    display: flex;
+    flex-flow: wrap row;
+    justify-content: space-around;
+    height: 100vh;
+    overflow: scroll;
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  .movie-list__item {
+    position: relative;
+    list-style-type:none;
+    width:50%;
+    padding-bottom: 57.774%;
+    overflow:hidden;
+    visibility:hidden;
+
+    -webkit-transform: rotate(-60deg) skewY(30deg);
+    -ms-transform: rotate(-60deg) skewY(30deg);
+    transform: rotate(-60deg) skewY(30deg);
+  }
+
+  .movie-list__item:nth-of-type(3n + 3) {
+      margin: -10vw 21vw;
+  }
+
 }

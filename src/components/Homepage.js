@@ -99,6 +99,7 @@ class Homepage extends React.Component {
         <h4>Current Movie:</h4>
         <Movie
           movieData={this.state.selectedMovie}
+          selected={true}
           />
       </section>
     )

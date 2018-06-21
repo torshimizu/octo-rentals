@@ -10,17 +10,24 @@ const Movie = (props) => {
   if (props.addMovieCallback) {
     button = (<button onClick={props.addMovieCallback}>Add to Library</button>)
   }
+  let movieDetails = null;
+  if (props.selected) {
+    movieDetails = "selected-movie-details"
+  } else {
+    movieDetails = "movie-details"
+  }
   return(
-    <section onClick={props.onMovieClick} >
+    <section className={movieDetails} onClick={props.onMovieClick} >
       <img src={movie.image_url} alt={`${movie.title} poster`}/>
-      <article className="movie-details__item">
-        <p>Title: {movie.title}</p>
-        <p>Overview: {movie.overview}</p>
-        <p>Release Date: {movie.release_date}</p>
-      </article>
-      {button}
+      <section className="caption">
+        <h3>{movie.title}</h3>
+        <p>{movie.overview}</p>
+        <span>{movie.release_date}</span>
+        {button}
+      </section>
     </section>
   )
+
 }
 
 Movie.propTypes = {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 
 import Movie from './Movie'
-import './MovieCollection.css'
+import './Movie.css'
 
 export default class MovieCollection extends Component {
   constructor(props) {
