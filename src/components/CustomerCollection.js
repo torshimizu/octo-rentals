@@ -18,17 +18,40 @@ class CustomerCollection extends React.Component {
   }
 
   componentDidMount = () => {
+    this.loadCustomers();
+  }
+
+  loadCustomers = () => {
     const customerURL = this.props.baseUrl + '/customers'
     axios.get(customerURL)
+    .then((response) => {
+      this.setState({customers: response.data});
+      this.props.displayAlert('success', 'Successfully loaded customers');
+
+    }).catch((errors) => {
+      console.log(errors);
+      this.props.displayAlert('error', 'Unable to load customers');
+
+    });
+  }
+
+  checkinCallback= (movieObj, customerObj) => {
+    const movie_id = movieObj.id;
+    const customer_id = customerObj.id;
+
+    const checkInUrl = this.props.baseUrl + `rentals/${movie_id}/return?customer_id=${customer_id}`
+
+    axios.post(checkInUrl)
       .then((response) => {
-        this.setState({customers: response.data});
-        this.props.displayAlert('success', 'Successfully loaded customers');
-
+        console.log(response.body);
+        this.props.displayAlert('success', `Successfully checked in ${movieObj.title}`);
+        // how to update the customer?
       }).catch((errors) => {
-        console.log(errors);
-        this.props.displayAlert('error', 'Unable to load customers');
-
+        console.log(errors.messages);
+        this.props.displayAlert('error', `Unable to check in ${movieObj.title}`);
       });
+    console.log('after the checkinCallback');
+    this.forceUpdate();
   }
 
   getCustomers = () => {
@@ -37,11 +60,13 @@ class CustomerCollection extends React.Component {
         const onCustomerClick = () => {
           this.props.customerClickCallback(customer);
         }
+
         return (
           <Customer
             key={index}
             customerData={customer}
-            onCustomerClick={onCustomerClick}
+            onCustomerCallback={onCustomerClick}
+            checkinClick={this.checkinCallback}
           />
         )
       })
@@ -51,7 +76,7 @@ class CustomerCollection extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="customer-collection">
         <h2>List of Customers:</h2>
         {this.getCustomers()}
       </div>

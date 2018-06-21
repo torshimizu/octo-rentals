@@ -38,7 +38,7 @@ class Homepage extends React.Component {
     const customer = this.state.selectedCustomer;
 
     if (this.state.selectedCustomer && this.state.selectedMovie) {
-      const title = movie.title;
+      const movie_id = movie.id;
       const id = customer.id;
 
       let dueDate = new Date();
@@ -48,12 +48,13 @@ class Homepage extends React.Component {
 
       this.displayAlert('loading', 'Checking out movie...')
 
-      const URL = (BASE_URL + `rentals/${title}/check-out?customer_id=${id}&due_date=${dueDate}`);
+      const URL = (BASE_URL + `rentals/${movie_id}/check-out?customer_id=${id}&due_date=${dueDate}`);
 
       axios.post(URL)
       .then((response) => {
         //status update responseText
-        this.displayAlert('success', `Successfully checked out ${title} for ${customer.name}`)
+        console.log(response);
+        this.displayAlert('success', `Successfully checked out ${movie.title} for ${customer.name}`)
         this.setState({
           selectedCustomer: null,
           selectedMovie: null,

@@ -1,0 +1,19 @@
+.customer {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  height: 40vh;
+}
+
+.customer-movie__image {
+  height: 30vh;
+  width: 15vw;
+  position: relative;
+}
+
+.customer-movie__image > button {
+  position: absolute;
+  bottom: 0;
+  left: 35px;
+  border-radius: 1px;
+  background-color: white;
+}
