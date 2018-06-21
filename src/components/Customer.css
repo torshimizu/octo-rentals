@@ -1,0 +1,36 @@
+.customer {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  height: 40vh;
+}
+
+.customer-movie__list {
+  list-style-type: none;
+  display: inline-flex;
+  align-items: center;
+  overflow-y: scroll;
+  bottom: 0;
+  height: auto;
+}
+
+.customer-movie__image {
+  height: 30vh;
+  position: relative;
+  transition: transform .2s;
+  margin: 0 .1em;
+  min-width: 10rem;
+}
+
+.customer-movie__image:hover {
+  z-index: 2;
+  transform: scale(1.25);
+}
+
+.customer-movie__image > button {
+  position: absolute;
+  bottom: 0;
+  left: 35px;
+  border-radius: 1px;
+  background-color: white;
+
+}

@@ -8,7 +8,6 @@ import axios from 'axios';
 
 import Alert from './Status';
 import CustomerCollection from './CustomerCollection';
-import Library from './Library';
 import Movie from './Movie';
 import Search from './Search';
 import MovieCollection from './MovieCollection';
@@ -38,7 +37,7 @@ class Homepage extends React.Component {
     const customer = this.state.selectedCustomer;
 
     if (this.state.selectedCustomer && this.state.selectedMovie) {
-      const title = movie.title;
+      const movie_id = movie.id;
       const id = customer.id;
 
       let dueDate = new Date();
@@ -46,11 +45,15 @@ class Homepage extends React.Component {
       dueDate.setDate(day);
       dueDate = dueDate.toDateString();
 
+      this.displayAlert('loading', 'Checking out movie...')
 
-      const URL = (BASE_URL + `rentals/${title}/check-out?customer_id=${id}&due_date=${dueDate}`);
+      const URL = (BASE_URL + `rentals/${movie_id}/check-out?customer_id=${id}&due_date=${dueDate}`);
+
       axios.post(URL)
       .then((response) => {
         //status update responseText
+        console.log(response);
+        this.displayAlert('success', `Successfully checked out ${movie.title} for ${customer.name}`)
         this.setState({
           selectedCustomer: null,
           selectedMovie: null,
@@ -60,6 +63,7 @@ class Homepage extends React.Component {
       .catch((error) => {
         console.log(error)
         //status update errorMessages
+        this.displayAlert('error', 'Unable to checkout movie');
       })
     }
   }
@@ -82,6 +86,16 @@ class Homepage extends React.Component {
 
   clearQuery = () => {
     this.setState({query: null});
+    this.clearAlert();
+  }
+
+  clearAlert = () => {
+    this.setState({
+      alert: {
+        type: null,
+        message: null
+      }
+    })
   }
 
   displayAlert = (type, message) => {
@@ -130,6 +144,13 @@ class Homepage extends React.Component {
     if (this.state.query) {
       searchResults = this.displaySearch();
     }
+
+    let checkoutButton = null;
+    if (this.state.selectedMovie && this.state.selectedCustomer) {
+      checkoutButton = (<div className="checkout-button" onClick={this.checkout}>
+          Checkout
+        </div>)
+    }
     return (
       <Router>
         <section>
@@ -141,13 +162,11 @@ class Homepage extends React.Component {
               <div>
                 {selectedMovie}
               </div>
-              <div className="checkout-button" onClick={this.checkout}>
-                Checkout
-              </div>
+              {checkoutButton}
             </div>
             <ul>
               <li>
-                <Link to='/'>Home</Link>
+                <Link to='/' onClick={this.clearQuery}>Home</Link>
               </li>
               <li>
                 <Link to='/library'>Library</Link>
@@ -156,7 +175,7 @@ class Homepage extends React.Component {
                 <Link to='/customers'>Customers</Link>
               </li>
               <li>
-                <Link to='/search'>Search</Link>
+                <Link to='/search' onClick={this.clearAlert}>Search</Link>
                 <Route path='/search'
                   render={() => <Search
                     searchCallback={this.search}
@@ -174,11 +193,12 @@ class Homepage extends React.Component {
             <Route
               path='/library'
               render={() => {
-                return <Library
+                return (<MovieCollection
+                  url={BASE_URL}
                   selectedMovieCallback={this.updateSelectedMovie}
-                  baseUrl={BASE_URL}
                   displayAlert={this.displayAlert}
-                  />}}
+                  />)
+                }}
               />
             <Route
               path='/customers'
@@ -186,6 +206,7 @@ class Homepage extends React.Component {
                 return <CustomerCollection
                   baseUrl={BASE_URL}
                   customerClickCallback={this.updateSelectedCustomer}
+                  displayAlert={this.displayAlert}
                   />
               }
             } />

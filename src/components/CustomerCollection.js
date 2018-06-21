@@ -6,7 +6,8 @@ import Customer from './Customer';
 class CustomerCollection extends React.Component {
   static propTypes = {
     baseUrl: PropTypes.string,
-    customerClickCallback: PropTypes.func.isRequired
+    customerClickCallback: PropTypes.func.isRequired,
+    displayAlert: PropTypes.func
   }
 
   constructor (props) {
@@ -17,14 +18,44 @@ class CustomerCollection extends React.Component {
   }
 
   componentDidMount = () => {
-    const customerURL = this.props.baseUrl + '/customers'
+    this.loadCustomers();
+  }
+
+  loadCustomers = () => {
+    const customerURL = this.props.baseUrl + '/customers';
     axios.get(customerURL)
+    .then((response) => {
+      this.setState({customers: response.data});
+      this.props.displayAlert('success', `Loaded ${response.data.length} customers`);
+
+    }).catch((errors) => {
+      console.log(errors);
+      this.props.displayAlert('error', 'Unable to load customers');
+
+    });
+  }
+
+  updateCustomers = (updatedCustomer) => {
+    let updatedCustomers = this.state.customers.slice();
+    const customerIndex = updatedCustomers.findIndex((customer) => {
+      return customer.id === updatedCustomer.id;
+    });
+    updatedCustomers.splice(customerIndex, 1, updatedCustomer);
+
+    this.setState({customers: updatedCustomers});
+  }
+
+  checkinCallback = (movieObj, customerObj) => {
+    const movie_id = movieObj.id;
+    const customer_id = customerObj.id;
+
+    const checkInUrl = this.props.baseUrl + `rentals/${movie_id}/return?customer_id=${customer_id}`;
+    axios.post(checkInUrl)
       .then((response) => {
-
-        this.setState({customers: response.data});
-
+        this.props.displayAlert('success', `Successfully checked in ${movieObj.title}`);
+        this.updateCustomers(response.data);
       }).catch((errors) => {
-        console.log(errors);
+        this.props.displayAlert('error', `Unable to check in ${movieObj.title}`);
       });
   }
 
@@ -34,11 +65,13 @@ class CustomerCollection extends React.Component {
         const onCustomerClick = () => {
           this.props.customerClickCallback(customer);
         }
+
         return (
           <Customer
             key={index}
             customerData={customer}
-            onCustomerClick={onCustomerClick}
+            onCustomerCallback={onCustomerClick}
+            checkinClick={this.checkinCallback}
           />
         )
       })
@@ -48,7 +81,7 @@ class CustomerCollection extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="customer-collection">
         <h2>List of Customers:</h2>
         {this.getCustomers()}
       </div>
