@@ -23,7 +23,7 @@ const Customer = (props) => {
 
             const imageStyles = {
               backgroundImage: `url(${movie.image_url})`,
-              backgroundSize: 'contain',
+              backgroundSize: 'cover',
             }
 
             return (

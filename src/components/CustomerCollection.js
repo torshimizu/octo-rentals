@@ -26,7 +26,7 @@ class CustomerCollection extends React.Component {
     axios.get(customerURL)
     .then((response) => {
       this.setState({customers: response.data});
-      this.props.displayAlert('success', 'Successfully loaded customers');
+      this.props.displayAlert('success', `Loaded ${response.data.length} customers`);
 
     }).catch((errors) => {
       console.log(errors);

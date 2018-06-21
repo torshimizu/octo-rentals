@@ -4,10 +4,26 @@
   height: 40vh;
 }
 
+.customer-movie__list {
+  list-style-type: none;
+  display: inline-flex;
+  align-items: center;
+  overflow-y: scroll;
+  bottom: 0;
+  height: 20rem;
+}
+
 .customer-movie__image {
   height: 30vh;
-  width: 15vw;
   position: relative;
+  transition: transform .2s;
+  margin: 0 .1em;
+  min-width: 10rem;
+}
+
+.customer-movie__image:hover {
+  z-index: 2;
+  transform: scale(1.25);
 }
 
 .customer-movie__image > button {
@@ -16,4 +32,5 @@
   left: 35px;
   border-radius: 1px;
   background-color: white;
+
 }
