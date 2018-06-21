@@ -14,7 +14,7 @@ const Customer = (props) => {
     } else {
       movieList = (customer.checked_out_movies.map((movie, index) => {
         const checkinClosure = () => {
-          props.checkinClick(movie, customer)
+          props.checkinClick(movie, customer);
         }
 
         const imageStyles = {

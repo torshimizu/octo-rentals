@@ -22,7 +22,7 @@ class CustomerCollection extends React.Component {
   }
 
   loadCustomers = () => {
-    const customerURL = this.props.baseUrl + '/customers'
+    const customerURL = this.props.baseUrl + '/customers';
     axios.get(customerURL)
     .then((response) => {
       this.setState({customers: response.data});
@@ -35,23 +35,28 @@ class CustomerCollection extends React.Component {
     });
   }
 
-  checkinCallback= (movieObj, customerObj) => {
+  updateCustomers = (updatedCustomer) => {
+    let updatedCustomers = this.state.customers.slice();
+    const customerIndex = updatedCustomers.findIndex((customer) => {
+      return customer.id === updatedCustomer.id;
+    });
+    updatedCustomers.splice(customerIndex, 1, updatedCustomer);
+
+    this.setState({customers: updatedCustomers});
+  }
+
+  checkinCallback = (movieObj, customerObj) => {
     const movie_id = movieObj.id;
     const customer_id = customerObj.id;
 
-    const checkInUrl = this.props.baseUrl + `rentals/${movie_id}/return?customer_id=${customer_id}`
-
+    const checkInUrl = this.props.baseUrl + `rentals/${movie_id}/return?customer_id=${customer_id}`;
     axios.post(checkInUrl)
       .then((response) => {
-        console.log(response.body);
         this.props.displayAlert('success', `Successfully checked in ${movieObj.title}`);
-        // how to update the customer?
+        this.updateCustomers(response.data);
       }).catch((errors) => {
-        console.log(errors.messages);
         this.props.displayAlert('error', `Unable to check in ${movieObj.title}`);
       });
-    console.log('after the checkinCallback');
-    this.forceUpdate();
   }
 
   getCustomers = () => {

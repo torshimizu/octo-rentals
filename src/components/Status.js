@@ -9,7 +9,7 @@ export default class Alert extends Component {
   render () {
     return (
       <section className={`validation-errors-display ${this.props.type}` }>
-        {this.props.type === 'error' ? "There was a problem :" : ""}
+        {this.props.type === 'error' ? "There was a problem: " : ""}
         {this.props.message}
       </section>
     )
