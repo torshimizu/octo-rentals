@@ -39,7 +39,7 @@ export default class MovieCollection extends Component {
       .then((response) => {
         this.setState({movies: response.data});
         //add a status component
-        this.props.displayAlert('success', 'Loaded movies');
+        this.props.displayAlert('success', `Loaded ${response.data.length} movies`);
       })
       .catch((error) => {
         console.log(error);
