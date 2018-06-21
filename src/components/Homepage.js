@@ -193,11 +193,12 @@ class Homepage extends React.Component {
             <Route
               path='/library'
               render={() => {
-                return <Library
+                return (<MovieCollection
+                  url={BASE_URL}
                   selectedMovieCallback={this.updateSelectedMovie}
-                  baseUrl={BASE_URL}
                   displayAlert={this.displayAlert}
-                  />}}
+                  />)
+                }}
               />
             <Route
               path='/customers'
