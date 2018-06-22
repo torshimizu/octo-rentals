@@ -24,7 +24,6 @@ class Homepage extends React.Component {
     this.state = {
       selectedCustomer: null,
       selectedMovie: null,
-      // query: null,
       customers: [],
       movies: [],
       searchResults: [],
@@ -49,6 +48,33 @@ class Homepage extends React.Component {
       console.log(error);
       //add a status component
       this.displayAlert('error', 'Unable to load movies');
+    });
+  }
+
+  loadCustomers = () => {
+    const customerURL = BASE_URL + '/customers';
+    axios.get(customerURL)
+    .then((response) => {
+      this.setState({customers: response.data});
+      this.displayAlert('success', `Loaded ${response.data.length} customers`);
+
+    }).catch((error) => {
+      console.log(error.response.data);
+      this.displayAlert('error', 'Unable to load customers');
+
+    });
+  }
+
+  updateCustomers = (movieData) => {
+    const customerURL = BASE_URL + '/customers';
+    axios.get(customerURL)
+    .then((response) => {
+      this.setState({customers: response.data});
+      this.displayAlert('success', `Successfully checked in ${movieData.title}`);
+
+    }).catch((error) => {
+      console.log(error.response.data);
+      this.displayAlert('error', 'Unable to load customers');
 
     });
   }
@@ -74,20 +100,36 @@ class Homepage extends React.Component {
 
       axios.post(URL)
       .then((response) => {
-        //status update responseText
-        console.log(response);
-        this.displayAlert('success', `Successfully checked out ${movie.title} for ${customer.name}`)
+        console.log(response.data);
+        this.displayAlert('success', `Successfully checked out ${movie.title} for ${customer.name}`);
+        this.loadCustomers();
         this.setState({
           selectedCustomer: null,
           selectedMovie: null,
           query: null
-        })
+        });
       })
       .catch((error) => {
         console.log(error)
         this.displayAlert('error', 'Unable to checkout movie');
       })
     }
+  }
+
+  checkinCallback = (movieObj, customerObj) => {
+    const movie_id = movieObj.id;
+    const customer_id = customerObj.id;
+
+    const checkInUrl = BASE_URL + `rentals/${movie_id}/return?customer_id=${customer_id}`;
+    axios.post(checkInUrl)
+      .then((response) => {
+        console.log(response.data);
+        this.displayAlert('success', `Successfully checked in ${movieObj.title}`);
+        this.updateCustomers(movieObj);
+      }).catch((errors) => {
+        console.log(errors.response.data);
+        this.displayAlert('error', `Unable to check in ${movieObj.title}`);
+      });
   }
 
   updateSelectedCustomer = (customerObj) => {
@@ -215,7 +257,7 @@ class Homepage extends React.Component {
                 </Link>
               </li>
               <li>
-                <Link to='/customers'>Customers</Link>
+                <Link to='/customers' onClick={this.loadCustomers}>Customers</Link>
               </li>
               <li>
                 <Link to='/search' onClick={this.clearAlert}>Search</Link>
@@ -248,9 +290,12 @@ class Homepage extends React.Component {
               path='/customers'
               render={() => {
                 return <CustomerCollection
+                  customers={this.state.customers}
                   baseUrl={BASE_URL}
                   customerClickCallback={this.updateSelectedCustomer}
                   displayAlert={this.displayAlert}
+                  updateCustomers={this.updateCustomers}
+                  checkinCallback={this.checkinCallback}
                   />
               }
             } />
