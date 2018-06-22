@@ -12,8 +12,8 @@ import Movie from './Movie';
 import Search from './Search';
 import MovieCollection from './MovieCollection';
 
-
 import './Homepage.css';
+
 
 const BASE_URL = 'http://localhost:3000/';
 
@@ -25,12 +25,87 @@ class Homepage extends React.Component {
       selectedCustomer: null,
       selectedMovie: null,
       query: null,
+      customers: [],
+      movies: [],
+      searchResults: [],
       alert: {
         message: null,
         type: null
       }
     }
   }
+
+  // componentDidMount() {
+  //   let movieURL = BASE_URL + '/movies';
+  //
+  //
+  //   const query = this.state.query;
+  //   if (query) {
+  //     this.displayAlert('loading', `Searching for ${query}`);
+  //     movieURL = (movieURL + '?query=' + query)
+  //     axios.get(movieURL)
+  //     .then((response) => {
+  //       this.setState({searchResults: response.data});
+  //       this.displayAlert('success', `Loaded results for ${query}`);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       this.displayAlert('error', 'Unable to load movies');
+  //     })
+  //   } else {
+  //     this.displayAlert('loading', `Loading Movies...`);
+  //
+  //     axios.get(movieURL)
+  //     .then((response) => {
+  //       this.setState({movies: response.data});
+  //       //add a status component
+  //       this.displayAlert('success', `Loaded ${response.data.length} movies`);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       //add a status component
+  //       this.displayAlert('error', 'Unable to load movies');
+  //
+  //     });
+  //   }
+  // }
+
+  getMovies = () => {
+  let movieURL = BASE_URL + '/movies';
+
+  axios.get(movieURL)
+    .then((response) => {
+      this.setState({movies: response.data});
+      //add a status component
+      this.displayAlert('success', `Loaded ${response.data.length} movies`);
+    })
+    .catch((error) => {
+      console.log(error);
+      //add a status component
+      this.displayAlert('error', 'Unable to load movies');
+
+    });
+  }
+
+  getSearchMovies = () => {
+    let movieURL = BASE_URL + '/movies';
+    let query = this.state.query;
+
+    this.displayAlert('loading', `Searching for ${query}`);
+    movieURL = (movieURL + '?query=' + query);
+
+    axios.get(movieURL)
+    .then((response) => {
+      this.setState({searchResults: response.data});
+      this.displayAlert('success', `Loaded results for ${query}`);
+    })
+    .catch((error) => {
+      console.log(error);
+      this.displayAlert('error', 'Unable to load movies');
+    })
+
+  }
+
   checkout = (event) => {
     event.preventDefault();
     const movie = this.state.selectedMovie;
@@ -62,14 +137,14 @@ class Homepage extends React.Component {
       })
       .catch((error) => {
         console.log(error)
-        //status update errorMessages
         this.displayAlert('error', 'Unable to checkout movie');
       })
     }
   }
 
   search = (query) => {
-    this.setState({query: query['query']})
+    this.setState({query: query['query']});
+    this.getSearchMovies();
   }
 
   updateSelectedCustomer = (customerObj) => {
@@ -119,14 +194,15 @@ class Homepage extends React.Component {
     )
   }
 
-  displaySearch () {
+  displaySearch() {
     return(
-        <MovieCollection
-          query={this.state.query}
-          url={BASE_URL}
-          clearQueryCallback={this.clearQuery}
-          displayAlert={this.displayAlert}
-          />
+      <MovieCollection
+        searchResults={this.state.searchResults}
+        query={this.state.query}
+        url={BASE_URL}
+        clearQueryCallback={this.clearQuery}
+        displayAlert={this.displayAlert}
+      />
     )
   }
 
@@ -149,7 +225,7 @@ class Homepage extends React.Component {
     if (this.state.selectedMovie && this.state.selectedCustomer) {
       checkoutButton = (<div className="checkout-button" onClick={this.checkout}>
           Checkout
-        </div>)
+        </div>);
     }
     return (
       <Router>
@@ -166,20 +242,26 @@ class Homepage extends React.Component {
             </div>
             <ul>
               <li>
-                <Link to='/' onClick={this.clearQuery}>Home</Link>
+                <Link to='/'
+                  onClick={this.clearQuery}>
+                  Home
+                </Link>
               </li>
               <li>
-                <Link to='/library'>Library</Link>
+                <Link to='/library'
+                  onClick={this.getMovies}>
+                  Library
+                </Link>
               </li>
               <li>
                 <Link to='/customers'>Customers</Link>
               </li>
               <li>
-                <Link to='/search' onClick={this.clearAlert}>Search</Link>
+                <Link to='/search' onClick={this.ClearAlert}>Search</Link>
                 <Route path='/search'
                   render={() => <Search
                     searchCallback={this.search}
-                    />
+                  />
                 }/>
               </li>
             </ul>
@@ -194,10 +276,11 @@ class Homepage extends React.Component {
               path='/library'
               render={() => {
                 return (<MovieCollection
+                  movies={this.state.movies}
                   url={BASE_URL}
                   selectedMovieCallback={this.updateSelectedMovie}
                   displayAlert={this.displayAlert}
-                  />)
+                  />);
                 }}
               />
             <Route
