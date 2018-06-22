@@ -10,12 +10,8 @@
 
 .movie-details {
   font-family: 'Quattrocento', Arial, sans-serif;
-/*   float: left; */
   overflow: hidden;
-/*   margin: 10px 1%; */
-/*   width: 100%; */
   color: #141414;
-/*   text-align: left; */
 }
 
 .movie-details * {
@@ -94,7 +90,7 @@
     transform: translateY(20%);
     height: 45%;
     width: 77%;
-    font-size: 3.25vw;
+    font-size: 3.5vw;
     overflow: scroll;
     -webkit-hyphens: auto;
     -ms-hyphens: auto;
@@ -148,19 +144,15 @@
   margin:0 auto;
 }
 
-.movie-list li.movie-list__item:last-of-type{
-  bottom: 0;
-}
 
 
 
-@media (max-width: 450px) {
   .movie-list__item:nth-of-type(2n + 2) {
     right: -33%;
     margin-top: -17%;
     margin-bottom: -17%;
   }
-}
+
 
 .movie-list__item {
   position: relative;
@@ -174,9 +166,13 @@
   -webkit-transform: rotate(-60deg) skewY(30deg);
   -ms-transform: rotate(-60deg) skewY(30deg);
   transform: rotate(-60deg) skewY(30deg);
+
+  .movie-list li.movie-list__item:last-of-type{
+    bottom: 0;
+  }
 }
 
-@media (min-width: 450px) {
+@media (max-width: 40em) {
 
   .movie-list {
     display: flex;
@@ -202,7 +198,52 @@
   }
 
   .movie-list__item:nth-of-type(3n + 3) {
-      margin: -10vw 21vw;
+      margin: -10% 21%;
   }
+
+}
+
+@media (max-width: 100em) {
+
+  .movie-list {
+    display: flex;
+    flex-flow: wrap row;
+    justify-content: space-evenly;
+    height: 100vh;
+    overflow: scroll;
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  .movie-list__item {
+    position: relative;
+    list-style-type:none;
+    width:25%;
+    padding-bottom: 28.65%;
+    overflow:hidden;
+    visibility:hidden;
+
+    -webkit-transform: rotate(-60deg) skewY(30deg);
+    -ms-transform: rotate(-60deg) skewY(30deg);
+    transform: rotate(-60deg) skewY(30deg);
+  }
+
+  .movie-list__item:nth-of-type(4n + 5) {
+      margin-left: 12.5%;
+  }
+
+  .movie-list__item:nth-of-type(4n + 7) {
+      margin-right: 12.5%;
+  }
+
+  /* .movie-list__item:nth-of-type(4n + 6) {
+      margin: -1%;
+  } */
+
+  /* .movie-list__item:nth-of-type(4n + 8) {
+    padding-bottom: 28.65%;
+    margin-left: -3%;
+} */
+
 
 }

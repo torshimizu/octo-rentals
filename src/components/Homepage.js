@@ -121,12 +121,12 @@ class Homepage extends React.Component {
 
   displaySearch () {
     return(
-        <MovieCollection
-          query={this.state.query}
-          url={BASE_URL}
-          clearQueryCallback={this.clearQuery}
-          displayAlert={this.displayAlert}
-          />
+      <MovieCollection
+        query={this.state.query}
+        url={BASE_URL}
+        clearQueryCallback={this.clearQuery}
+        displayAlert={this.displayAlert}
+        />
     )
   }
 
@@ -148,14 +148,18 @@ class Homepage extends React.Component {
     let checkoutButton = null;
     if (this.state.selectedMovie && this.state.selectedCustomer) {
       checkoutButton = (<div className="checkout-button" onClick={this.checkout}>
-          Checkout
-        </div>)
-    }
-    return (
-      <Router>
-        <section>
-          <header className="App-header">
-            <h1 className="App-title">Welcome to OctosVideoStore</h1>
+      Checkout
+    </div>)
+  }
+  return (
+    <Router>
+      <section>
+        <Alert
+          type={this.state.alert.type}
+          message={this.state.alert.message}
+          />
+        <div>
+          <aside>
             <div>
               <h4>Current Customer: </h4>
               <span>{selectedCustomer}</span>
@@ -183,11 +187,8 @@ class Homepage extends React.Component {
                 }/>
               </li>
             </ul>
-          </header>
-          <Alert
-            type={this.state.alert.type}
-            message={this.state.alert.message}
-          />
+          </aside>
+
           <main className="main-content">
             <Route exact path='/' />
             <Route
@@ -199,19 +200,21 @@ class Homepage extends React.Component {
                   displayAlert={this.displayAlert}
                   />)
                 }}
-              />
-            <Route
-              path='/customers'
-              render={() => {
-                return <CustomerCollection
-                  baseUrl={BASE_URL}
-                  customerClickCallback={this.updateSelectedCustomer}
-                  displayAlert={this.displayAlert}
-                  />
-              }
-            } />
-            {searchResults}
-          </main>
+                />
+              <Route
+                path='/customers'
+                render={() => {
+                  return <CustomerCollection
+                    baseUrl={BASE_URL}
+                    customerClickCallback={this.updateSelectedCustomer}
+                    displayAlert={this.displayAlert}
+                    />
+                }
+              } />
+              {searchResults}
+            </main>
+          </div>
+
         </section>
 
 
