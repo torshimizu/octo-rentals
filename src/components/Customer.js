@@ -34,7 +34,7 @@ const Customer = (props) => {
         <div className="customer-info__items">
           <h3>{customer.name}</h3>
           <p>{customer.phone}</p>
-          <button onClick={props.onCustomerCallback}>Select for Rental</button>
+          <button className="customer-rental__button" onClick={props.onCustomerCallback}>Select for Rental</button>
         </div>
         <ul className="customer-movie__list">
           {movieList}

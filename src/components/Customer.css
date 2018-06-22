@@ -26,11 +26,22 @@
   transform: scale(1.25);
 }
 
+.customer-rental__button,
+.customer-movie__image > button {
+  background: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
+  /*opacity: 0.8;*/
+  color: white;
+  font-size: 0.9rem;
+  box-shadow: 1px 1px rgba(230, 223, 223, 0.53);
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
 .customer-movie__image > button {
   position: absolute;
-  bottom: 0;
-  left: 35px;
+  bottom: 1.5rem;
+  left: 25px;
   border-radius: 1px;
-  background-color: white;
+  height: 2rem;
+  border: none;
 
 }
