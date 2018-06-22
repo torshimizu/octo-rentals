@@ -1,26 +1,54 @@
-.selected-movie {
-    background-color: rgba(84, 85, 85, .2);
-}
-
-.selected-movie img {
-  width: 6vw;
-}
-
-.selected-movie h4 {
-  margin: .5em;
-  font-size: 1em;
-}
-
-.selected-movie .movie-details__item {
-    display: none;
-}
-
-.main-content {
-  height: 75vh;
-  overflow-x: scroll;
+* {
+    font-family: 'Oswald', sans-serif;
 }
 
 ul {
-  list-style-type: none;
-  display: inline-flex;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+    background: url(https://s3.amazonaws.com/ritalbradley-dev-photos/twinkle-back.gif);
+}
+
+nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+}
+
+.Navigation li a {
+    display: block;
+    padding: 2rem;
+    text-align: center;
+    text-decoration: none;
+    background-color: #ff00008f;
+    margin: 0;
+    height: 100%;
+    color: white;
+    font-weight: 900;
+    letter-spacing: .5em;
+    text-transform: uppercase;
+}
+
+.Navigation li a:hover {
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+.Navigation li:hover {
+    background: linear-gradient(60deg, red,orange,yellow,green,blue,purple);
+    opacity: .8;
+}
+
+.Navigation li {
+    padding: .1rem;
+}
+
+.main-content {
+    height: 44vh;
+    overflow-y: hidden;
+    width: 100%;
+}
+
+@media (min-width: 420px) {
 }
