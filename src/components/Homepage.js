@@ -36,9 +36,9 @@ class Homepage extends React.Component {
 
 
   getMovies = () => {
-  let movieURL = BASE_URL + '/movies';
+    let movieURL = BASE_URL + '/movies';
 
-  axios.get(movieURL)
+    axios.get(movieURL)
     .then((response) => {
       this.setState({movies: response.data});
       //add a status component
@@ -122,14 +122,14 @@ class Homepage extends React.Component {
 
     const checkInUrl = BASE_URL + `rentals/${movie_id}/return?customer_id=${customer_id}`;
     axios.post(checkInUrl)
-      .then((response) => {
-        console.log(response.data);
-        this.displayAlert('success', `Successfully checked in ${movieObj.title}`);
-        this.updateCustomers(movieObj);
-      }).catch((errors) => {
-        console.log(errors.response.data);
-        this.displayAlert('error', `Unable to check in ${movieObj.title}`);
-      });
+    .then((response) => {
+      console.log(response.data);
+      this.displayAlert('success', `Successfully checked in ${movieObj.title}`);
+      this.updateCustomers(movieObj);
+    }).catch((errors) => {
+      console.log(errors.response.data);
+      this.displayAlert('error', `Unable to check in ${movieObj.title}`);
+    });
   }
 
   updateSelectedCustomer = (customerObj) => {
@@ -178,6 +178,16 @@ class Homepage extends React.Component {
     )
   }
 
+  displayCustomer() {
+    return (
+      <section>
+        <h4>Current Customer: </h4>
+        <span>{this.state.selectedCustomer.name}</span>
+      </section>
+    )
+
+  }
+
 
   getSearchMovies = (queryObj) => {
     let movieURL = BASE_URL + '/movies';
@@ -205,14 +215,14 @@ class Homepage extends React.Component {
         url={BASE_URL}
         clearSearch={this.clearSearchResults}
         displayAlert={this.displayAlert}
-      />
+        />
     )
   }
 
   render() {
     let selectedCustomer = null;
     if (this.state.selectedCustomer) {
-      selectedCustomer = this.state.selectedCustomer.name;
+      selectedCustomer = this.displayCustomer();
     }
     let selectedMovie = null;
     if (this.state.selectedMovie) {
@@ -227,64 +237,62 @@ class Homepage extends React.Component {
     let checkoutButton = null;
     if (this.state.selectedMovie && this.state.selectedCustomer) {
       checkoutButton = (<div className="checkout-button" onClick={this.checkout}>
-          Checkout
-        </div>);
-    }
-    return (
-      <Router>
-        <section>
-          <header className="App-header">
-            <h1 className="App-title">Welcome to OctosVideoStore</h1>
-            <div>
-              <h4>Current Customer: </h4>
-              <span>{selectedCustomer}</span>
-              <div>
-                {selectedMovie}
-              </div>
-              {checkoutButton}
-            </div>
-            <ul>
-              <li>
-                <Link to='/'
-                  onClick={this.clearQuery}>
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to='/library'
-                  onClick={this.getMovies}>
-                  Library
-                </Link>
-              </li>
-              <li>
-                <Link to='/customers' onClick={this.loadCustomers}>Customers</Link>
-              </li>
-              <li>
-                <Link to='/search' onClick={this.clearAlert}>Search</Link>
-                <Route path='/search'
-                  render={() => <Search
-                    searchCallback={this.getSearchMovies}
+      Checkout
+    </div>);
+  }
+  return (
+    <Router>
+      <section>
+        <aside className="Navigation">
+          <div>
+            {selectedCustomer}
+            {selectedMovie}
+            {checkoutButton}
+          </div>
+        <nav>
+          <ul>
+            <li>
+              <Link to='/'
+                onClick={this.clearQuery}>
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to='/library'
+                onClick={this.getMovies}>
+                Library
+              </Link>
+            </li>
+            <li>
+              <Link to='/customers' onClick={this.loadCustomers}>Customers</Link>
+            </li>
+            <li>
+              <Link to='/search' onClick={this.clearAlert}>Search</Link>
+              <Route path='/search'
+                render={() => <Search
+                  searchCallback={this.getSearchMovies}
                   />
-                }/>
-              </li>
-            </ul>
-          </header>
-          <Alert
-            type={this.state.alert.type}
-            message={this.state.alert.message}
+              }/>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+        <Alert
+          type={this.state.alert.type}
+          message={this.state.alert.message}
           />
-          <main className="main-content">
-            <Route exact path='/' />
-            <Route
-              path='/library'
-              render={() => {
-                return (<MovieCollection
-                  movies={this.state.movies}
-                  url={BASE_URL}
-                  selectedMovieCallback={this.updateSelectedMovie}
-                  displayAlert={this.displayAlert}
-                  />);
-                }}
+        <main className="main-content">
+          <Route exact path='/' />
+          <Route
+            path='/library'
+            render={() => {
+              return (<MovieCollection
+                movies={this.state.movies}
+                url={BASE_URL}
+                selectedMovieCallback={this.updateSelectedMovie}
+                displayAlert={this.displayAlert}
+                />);
+              }}
               />
             <Route
               path='/customers'
