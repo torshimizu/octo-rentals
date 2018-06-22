@@ -55,7 +55,10 @@ class Homepage extends React.Component {
     const customerURL = BASE_URL + '/customers';
     axios.get(customerURL)
     .then((response) => {
-      this.setState({customers: response.data});
+      this.setState({
+        searchResults: [],
+        customers: response.data
+      });
       this.displayAlert('success', `Loaded ${response.data.length} customers`);
 
     }).catch((error) => {
@@ -69,7 +72,10 @@ class Homepage extends React.Component {
     const customerURL = BASE_URL + '/customers';
     axios.get(customerURL)
     .then((response) => {
-      this.setState({customers: response.data});
+      this.setState({
+        customers: response.data,
+        searchResults: [],
+      });
       this.displayAlert('success', `Successfully checked in ${movieData.title}`);
 
     }).catch((error) => {
@@ -145,7 +151,13 @@ class Homepage extends React.Component {
   }
 
   clearSearchResults = () => {
-    this.setState({searchResults: []});
+    this.setState({
+      searchResults: [],
+      alert: {
+        message: null,
+        type: null
+      }
+    });
   }
 
   clearAlert = () => {
@@ -253,7 +265,7 @@ class Homepage extends React.Component {
           <ul>
             <li>
               <Link to='/'
-                onClick={this.clearQuery}>
+                onClick={this.clearSearchResults}>
                 Home
               </Link>
             </li>
