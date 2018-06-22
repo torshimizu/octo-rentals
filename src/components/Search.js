@@ -13,16 +13,14 @@ export default class Search extends Component {
   onInputChange = (event) => {
 
   let updatedInput = Object.assign({}, this.state);
-
   updatedInput[event.target.name] = event.target.value;
-
   this.setState(updatedInput);
-}
+  }
 
-onFormSubmit = (event) => {
+  onFormSubmit = (event) => {
     event.preventDefault();
 
-    this.props.searchCallback(this.state)
+    this.props.searchCallback(this.state);
   }
 
   render() {

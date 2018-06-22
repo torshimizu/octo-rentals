@@ -12,8 +12,8 @@ import Movie from './Movie';
 import Search from './Search';
 import MovieCollection from './MovieCollection';
 
-
 import './Homepage.css';
+
 
 const BASE_URL = 'http://localhost:3000/';
 
@@ -24,13 +24,62 @@ class Homepage extends React.Component {
     this.state = {
       selectedCustomer: null,
       selectedMovie: null,
-      query: null,
+      customers: [],
+      movies: [],
+      searchResults: [],
       alert: {
         message: null,
         type: null
       }
     }
   }
+
+
+  getMovies = () => {
+  let movieURL = BASE_URL + '/movies';
+
+  axios.get(movieURL)
+    .then((response) => {
+      this.setState({movies: response.data});
+      //add a status component
+      this.displayAlert('success', `Loaded ${response.data.length} movies`);
+    })
+    .catch((error) => {
+      console.log(error);
+      //add a status component
+      this.displayAlert('error', 'Unable to load movies');
+    });
+  }
+
+  loadCustomers = () => {
+    const customerURL = BASE_URL + '/customers';
+    axios.get(customerURL)
+    .then((response) => {
+      this.setState({customers: response.data});
+      this.displayAlert('success', `Loaded ${response.data.length} customers`);
+
+    }).catch((error) => {
+      console.log(error.response.data);
+      this.displayAlert('error', 'Unable to load customers');
+
+    });
+  }
+
+  updateCustomers = (movieData) => {
+    const customerURL = BASE_URL + '/customers';
+    axios.get(customerURL)
+    .then((response) => {
+      this.setState({customers: response.data});
+      this.displayAlert('success', `Successfully checked in ${movieData.title}`);
+
+    }).catch((error) => {
+      console.log(error.response.data);
+      this.displayAlert('error', 'Unable to load customers');
+
+    });
+  }
+
+
   checkout = (event) => {
     event.preventDefault();
     const movie = this.state.selectedMovie;
@@ -51,25 +100,36 @@ class Homepage extends React.Component {
 
       axios.post(URL)
       .then((response) => {
-        //status update responseText
-        console.log(response);
-        this.displayAlert('success', `Successfully checked out ${movie.title} for ${customer.name}`)
+        console.log(response.data);
+        this.displayAlert('success', `Successfully checked out ${movie.title} for ${customer.name}`);
+        this.loadCustomers();
         this.setState({
           selectedCustomer: null,
           selectedMovie: null,
           query: null
-        })
+        });
       })
       .catch((error) => {
         console.log(error)
-        //status update errorMessages
         this.displayAlert('error', 'Unable to checkout movie');
       })
     }
   }
 
-  search = (query) => {
-    this.setState({query: query['query']})
+  checkinCallback = (movieObj, customerObj) => {
+    const movie_id = movieObj.id;
+    const customer_id = customerObj.id;
+
+    const checkInUrl = BASE_URL + `rentals/${movie_id}/return?customer_id=${customer_id}`;
+    axios.post(checkInUrl)
+      .then((response) => {
+        console.log(response.data);
+        this.displayAlert('success', `Successfully checked in ${movieObj.title}`);
+        this.updateCustomers(movieObj);
+      }).catch((errors) => {
+        console.log(errors.response.data);
+        this.displayAlert('error', `Unable to check in ${movieObj.title}`);
+      });
   }
 
   updateSelectedCustomer = (customerObj) => {
@@ -84,9 +144,8 @@ class Homepage extends React.Component {
     }
   }
 
-  clearQuery = () => {
-    this.setState({query: null});
-    this.clearAlert();
+  clearSearchResults = () => {
+    this.setState({searchResults: []});
   }
 
   clearAlert = () => {
@@ -119,14 +178,34 @@ class Homepage extends React.Component {
     )
   }
 
-  displaySearch () {
+
+  getSearchMovies = (queryObj) => {
+    let movieURL = BASE_URL + '/movies';
+    const query = queryObj['query'];
+
+    this.displayAlert('loading', `Searching for ${query}`);
+    movieURL = (movieURL + '?query=' + query);
+
+    axios.get(movieURL)
+    .then((response) => {
+      this.setState({searchResults: response.data});
+      this.displayAlert('success', `Loaded results for ${query}`);
+    })
+    .catch((error) => {
+      console.log(error);
+      this.displayAlert('error', 'Unable to load movies');
+    });
+  }
+
+  displaySearch() {
     return(
       <MovieCollection
+        searchResults={this.state.searchResults}
         query={this.state.query}
         url={BASE_URL}
-        clearQueryCallback={this.clearQuery}
+        clearSearch={this.clearSearchResults}
         displayAlert={this.displayAlert}
-        />
+      />
     )
   }
 
@@ -141,25 +220,21 @@ class Homepage extends React.Component {
     }
 
     let searchResults = null;
-    if (this.state.query) {
+    if (this.state.searchResults) {
       searchResults = this.displaySearch();
     }
 
     let checkoutButton = null;
     if (this.state.selectedMovie && this.state.selectedCustomer) {
       checkoutButton = (<div className="checkout-button" onClick={this.checkout}>
-      Checkout
-    </div>)
-  }
-  return (
-    <Router>
-      <section>
-        <Alert
-          type={this.state.alert.type}
-          message={this.state.alert.message}
-          />
-        <div>
-          <aside>
+          Checkout
+        </div>);
+    }
+    return (
+      <Router>
+        <section>
+          <header className="App-header">
+            <h1 className="App-title">Welcome to OctosVideoStore</h1>
             <div>
               <h4>Current Customer: </h4>
               <span>{selectedCustomer}</span>
@@ -170,51 +245,62 @@ class Homepage extends React.Component {
             </div>
             <ul>
               <li>
-                <Link to='/' onClick={this.clearQuery}>Home</Link>
+                <Link to='/'
+                  onClick={this.clearQuery}>
+                  Home
+                </Link>
               </li>
               <li>
-                <Link to='/library'>Library</Link>
+                <Link to='/library'
+                  onClick={this.getMovies}>
+                  Library
+                </Link>
               </li>
               <li>
-                <Link to='/customers'>Customers</Link>
+                <Link to='/customers' onClick={this.loadCustomers}>Customers</Link>
               </li>
               <li>
                 <Link to='/search' onClick={this.clearAlert}>Search</Link>
                 <Route path='/search'
                   render={() => <Search
-                    searchCallback={this.search}
-                    />
+                    searchCallback={this.getSearchMovies}
+                  />
                 }/>
               </li>
             </ul>
-          </aside>
-
+          </header>
+          <Alert
+            type={this.state.alert.type}
+            message={this.state.alert.message}
+          />
           <main className="main-content">
             <Route exact path='/' />
             <Route
               path='/library'
               render={() => {
                 return (<MovieCollection
+                  movies={this.state.movies}
                   url={BASE_URL}
                   selectedMovieCallback={this.updateSelectedMovie}
                   displayAlert={this.displayAlert}
-                  />)
+                  />);
                 }}
-                />
-              <Route
-                path='/customers'
-                render={() => {
-                  return <CustomerCollection
-                    baseUrl={BASE_URL}
-                    customerClickCallback={this.updateSelectedCustomer}
-                    displayAlert={this.displayAlert}
-                    />
-                }
-              } />
-              {searchResults}
-            </main>
-          </div>
-
+              />
+            <Route
+              path='/customers'
+              render={() => {
+                return <CustomerCollection
+                  customers={this.state.customers}
+                  baseUrl={BASE_URL}
+                  customerClickCallback={this.updateSelectedCustomer}
+                  displayAlert={this.displayAlert}
+                  updateCustomers={this.updateCustomers}
+                  checkinCallback={this.checkinCallback}
+                  />
+              }
+            } />
+            {searchResults}
+          </main>
         </section>
 
 
