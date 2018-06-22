@@ -54,7 +54,6 @@ export default class MovieCollection extends Component {
       }
       return(
         <li className="movie-list__item " key={index}>
-          <h2>Search Result # {index}</h2>
           <Movie
             image_url={movie.image_url}
             movieData={movie}
