@@ -6,70 +6,6 @@ import Movie from './Movie'
 import './Movie.css'
 
 export default class MovieCollection extends Component {
-  // constructor(props) {
-  //   super(props);
-  //
-  //   this.state = {
-  //     movies: [],
-  //     searchResults: []
-  //   }
-  // }
-
-  // componentDidMount() {
-  //   let movieURL = this.props.url + '/movies';
-  //
-  //
-  //   const query = this.props.query;
-  //   if (query) {
-  //     this.props.displayAlert('loading', `Searching for ${query}`);
-  //     movieURL = (movieURL + '?query=' + query)
-  //     axios.get(movieURL)
-  //     .then((response) => {
-  //       this.setState({searchResults: response.data});
-  //       this.props.displayAlert('success', `Loaded results for ${query}`);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       this.props.displayAlert('error', 'Unable to load movies');
-  //     })
-  //   } else {
-  //     this.props.displayAlert('loading', `Loading Movies...`);
-  //
-  //     axios.get(movieURL)
-  //     .then((response) => {
-  //       this.setState({movies: response.data});
-  //       //add a status component
-  //       this.props.displayAlert('success', `Loaded ${response.data.length} movies`);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       //add a status component
-  //       this.props.displayAlert('error', 'Unable to load movies');
-  //
-  //     });
-  //   }
-  // }
-
-  // componentDidUpdate(prevProps) {
-  // if (this.props.query !== prevProps.query) {
-  //     const query = this.props.query;
-  //     let movieURL = this.props.url + '/movies?query=' + query;
-  //
-  //     this.props.displayAlert('loading', `Searching for ${query}`)
-  //
-  //     axios.get(movieURL)
-  //     .then((response) => {
-  //       this.setState({searchResults: response.data});
-  //       // add a status component
-  //       this.props.displayAlert('success', `Loaded results for ${response.data.title}`);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       // add a status component
-  //       this.props.displayAlert('error', `Unable to load results for ${query}`)
-  //     })
-  //   }
-  // }
 
   addMovie = (movie) => {
     const postURL = this.props.url + `movies?query=${movie.external_id}`;
@@ -79,12 +15,15 @@ export default class MovieCollection extends Component {
         console.log(response.data);
         // update status
         this.props.displayAlert('success', `Successfully added ${response.data.title}`);
-        this.setState({searchResults: []});
-        this.props.clearQueryCallback();
+        this.props.clearSearch();
 
       }).catch((error) => {
-        console.log(error);
-        this.props.displayAlert('error', 'Unable to add movie');
+        console.log(error.response.data);
+        if (error.response.data.errors.includes('external_id')){
+          this.props.displayAlert('error', 'This movie was already added to the library');
+        } else {
+          this.props.displayAlert('error', 'Unable to add movie');
+        }
       });
 
   }
@@ -146,7 +85,7 @@ export default class MovieCollection extends Component {
     url: PropTypes.string.isRequired,
     query: PropTypes.string,
     selectedMovieCallback: PropTypes.func,
-    clearQueryCallback: PropTypes.func,
+    clearSearch: PropTypes.func,
     displayAlert: PropTypes.func
   }
 }

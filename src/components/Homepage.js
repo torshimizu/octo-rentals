@@ -24,7 +24,7 @@ class Homepage extends React.Component {
     this.state = {
       selectedCustomer: null,
       selectedMovie: null,
-      query: null,
+      // query: null,
       customers: [],
       movies: [],
       searchResults: [],
@@ -35,40 +35,6 @@ class Homepage extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   let movieURL = BASE_URL + '/movies';
-  //
-  //
-  //   const query = this.state.query;
-  //   if (query) {
-  //     this.displayAlert('loading', `Searching for ${query}`);
-  //     movieURL = (movieURL + '?query=' + query)
-  //     axios.get(movieURL)
-  //     .then((response) => {
-  //       this.setState({searchResults: response.data});
-  //       this.displayAlert('success', `Loaded results for ${query}`);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       this.displayAlert('error', 'Unable to load movies');
-  //     })
-  //   } else {
-  //     this.displayAlert('loading', `Loading Movies...`);
-  //
-  //     axios.get(movieURL)
-  //     .then((response) => {
-  //       this.setState({movies: response.data});
-  //       //add a status component
-  //       this.displayAlert('success', `Loaded ${response.data.length} movies`);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       //add a status component
-  //       this.displayAlert('error', 'Unable to load movies');
-  //
-  //     });
-  //   }
-  // }
 
   getMovies = () => {
   let movieURL = BASE_URL + '/movies';
@@ -87,24 +53,6 @@ class Homepage extends React.Component {
     });
   }
 
-  getSearchMovies = () => {
-    let movieURL = BASE_URL + '/movies';
-    let query = this.state.query;
-
-    this.displayAlert('loading', `Searching for ${query}`);
-    movieURL = (movieURL + '?query=' + query);
-
-    axios.get(movieURL)
-    .then((response) => {
-      this.setState({searchResults: response.data});
-      this.displayAlert('success', `Loaded results for ${query}`);
-    })
-    .catch((error) => {
-      console.log(error);
-      this.displayAlert('error', 'Unable to load movies');
-    })
-
-  }
 
   checkout = (event) => {
     event.preventDefault();
@@ -142,11 +90,6 @@ class Homepage extends React.Component {
     }
   }
 
-  search = (query) => {
-    this.setState({query: query['query']});
-    this.getSearchMovies();
-  }
-
   updateSelectedCustomer = (customerObj) => {
     this.setState({selectedCustomer: customerObj});
   }
@@ -159,9 +102,8 @@ class Homepage extends React.Component {
     }
   }
 
-  clearQuery = () => {
-    this.setState({query: null});
-    this.clearAlert();
+  clearSearchResults = () => {
+    this.setState({searchResults: []});
   }
 
   clearAlert = () => {
@@ -194,13 +136,32 @@ class Homepage extends React.Component {
     )
   }
 
+
+  getSearchMovies = (queryObj) => {
+    let movieURL = BASE_URL + '/movies';
+    const query = queryObj['query'];
+
+    this.displayAlert('loading', `Searching for ${query}`);
+    movieURL = (movieURL + '?query=' + query);
+
+    axios.get(movieURL)
+    .then((response) => {
+      this.setState({searchResults: response.data});
+      this.displayAlert('success', `Loaded results for ${query}`);
+    })
+    .catch((error) => {
+      console.log(error);
+      this.displayAlert('error', 'Unable to load movies');
+    });
+  }
+
   displaySearch() {
     return(
       <MovieCollection
         searchResults={this.state.searchResults}
         query={this.state.query}
         url={BASE_URL}
-        clearQueryCallback={this.clearQuery}
+        clearSearch={this.clearSearchResults}
         displayAlert={this.displayAlert}
       />
     )
@@ -217,7 +178,7 @@ class Homepage extends React.Component {
     }
 
     let searchResults = null;
-    if (this.state.query) {
+    if (this.state.searchResults) {
       searchResults = this.displaySearch();
     }
 
@@ -257,10 +218,10 @@ class Homepage extends React.Component {
                 <Link to='/customers'>Customers</Link>
               </li>
               <li>
-                <Link to='/search' onClick={this.ClearAlert}>Search</Link>
+                <Link to='/search' onClick={this.clearAlert}>Search</Link>
                 <Route path='/search'
                   render={() => <Search
-                    searchCallback={this.search}
+                    searchCallback={this.getSearchMovies}
                   />
                 }/>
               </li>

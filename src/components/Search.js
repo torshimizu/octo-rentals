@@ -20,7 +20,7 @@ export default class Search extends Component {
   onFormSubmit = (event) => {
     event.preventDefault();
 
-    this.props.searchCallback(this.state)
+    this.props.searchCallback(this.state);
   }
 
   render() {
