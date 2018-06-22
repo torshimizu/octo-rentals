@@ -22,7 +22,7 @@ const Movie = (props) => {
       <section className="caption">
         <h3>{movie.title}</h3>
         <p>{movie.overview}</p>
-        <span>{movie.release_date}</span>
+        <span>{movie.release_year}</span>
         {button}
       </section>
     </section>
@@ -35,35 +35,5 @@ Movie.propTypes = {
   addMovieCallback: PropTypes.func,
   onMovieClick: PropTypes.func
 }
-
-
-
-// export default class Movie extends Component {
-//   render() {
-//     let movie = this.props
-//
-//     return(
-//       <a value={movie.id} onClick={movie.selectedMovieCallback} >
-//         <img src={`${movie.image_url}`} alt={`${movie.title} poster`}/>
-//         <section className="movie-details__item">
-//             <p>Title: {movie.title}</p>
-//             <p>Overview: {movie.overview}</p>
-//             <p>Release Date: {movie.release_date}</p>
-//         </section>
-//       </a>
-//     )
-//   }
-//
-//   static propTypes = {
-//     external_id: PropTypes.number,
-//     id: PropTypes.number,
-//     image_url: PropTypes.string.isRequired,
-//     overview: PropTypes.string,
-//     release_date: PropTypes.string,
-//     title: PropTypes.string,
-//     addMovieCallback: PropTypes.func,
-//     selectMovieCallback: PropTypes.func
-//   }
-// }
 
 export default Movie;
