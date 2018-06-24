@@ -13,6 +13,7 @@ import Search from './Search';
 import MovieCollection from './MovieCollection';
 
 import './Homepage.css';
+import './caption.css';
 
 
 const BASE_URL = 'http://localhost:3000/';
@@ -192,9 +193,9 @@ class Homepage extends React.Component {
 
   displayCustomer() {
     return (
-      <section>
+      <section className="selected-customer__name">
         <h4>Current Customer: </h4>
-        <span>{this.state.selectedCustomer.name}</span>
+        <span >{this.state.selectedCustomer.name}</span>
       </section>
     )
 
@@ -256,7 +257,7 @@ class Homepage extends React.Component {
     <Router>
       <section>
         <aside className="Navigation">
-          <div>
+          <div className="checkout-section">
             {selectedCustomer}
             {selectedMovie}
             {checkoutButton}

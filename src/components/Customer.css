@@ -2,6 +2,17 @@
   display: grid;
   grid-template-columns: 1fr 3fr;
   height: 40vh;
+  min-width: 100%;
+  margin-right: 2em;
+  background: linear-gradient(60deg, red,orange,yellow,green,blue,purple);
+  opacity: .8;
+}
+
+.customer-info__items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .customer-movie__list {
@@ -11,6 +22,15 @@
   overflow-y: scroll;
   bottom: 0;
   height: auto;
+}
+
+.customer-collection > h2 {
+  display: none;
+}
+
+.customer-collection {
+    margin: 0;
+    display: flex;
 }
 
 .customer-movie__image {

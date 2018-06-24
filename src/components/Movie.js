@@ -8,7 +8,7 @@ const Movie = (props) => {
   const movie = props.movieData;
   let button = null;
   if (props.addMovieCallback) {
-    button = (<button onClick={props.addMovieCallback}>Add to Library</button>)
+    button = (<button className="add-movie" onClick={props.addMovieCallback}>Add to Library</button>)
   }
   let movieDetails = null;
   if (props.selected) {
@@ -18,12 +18,12 @@ const Movie = (props) => {
   }
   return(
     <section className={movieDetails} onClick={props.onMovieClick} >
+      {button}
       <img src={movie.image_url} alt={`${movie.title} poster`}/>
       <section className="caption">
         <h3>{movie.title}</h3>
         <p>{movie.overview}</p>
         <span>{movie.release_year}</span>
-        {button}
       </section>
     </section>
   )
