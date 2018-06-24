@@ -16,7 +16,7 @@ import './Homepage.css';
 import './caption.css';
 
 
-const BASE_URL = 'http://localhost:3000/';
+const BASE_URL = 'https://octospride-videoapi.herokuapp.com/';
 
 class Homepage extends React.Component {
   constructor() {
